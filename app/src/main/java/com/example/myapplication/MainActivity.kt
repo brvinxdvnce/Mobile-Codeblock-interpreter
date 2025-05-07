@@ -35,6 +35,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import com.example.myapplication.screens.ReadyScriptsScreen
+import com.example.myapplication.screens.InfoScreen
+import com.example.myapplication.otherElements.Bar
+import com.example.myapplication.otherElements.AddElemBar
+import com.example.myapplication.screens.BuildScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,15 +49,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            NavHost (navController = navController, startDestination = "info") {
-                composable("play") {
-                    Play(navController)
+            NavHost(navController = navController, startDestination = "info") {
+                composable("build") {
+                    BuildScreen(navController)
                 }
-                composable("ready") {
-                    ReadyScripts(navController)
+                composable("scripts") {
+                    ReadyScriptsScreen(navController)
                 }
                 composable("info") {
-                    Info(navController)
+                    InfoScreen(navController)
                 }
             }
         }
@@ -58,52 +65,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Bar (navController: NavHostController) {
-    Row (modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 32.dp)
-        .background(Color.Gray),
-        horizontalArrangement = Arrangement
-            .SpaceEvenly
-    )
-    {
-        Button(onClick  = { navController.navigate("play" ) }) { Text("Try solve") }
-        Button(onClick  = { navController.navigate("ready") }) { Text("Ready scripts") }
-        Button(onClick  = { navController.navigate("info" ) }) { Text("Information") }
-    }
-}
+fun ReadyScriptsScreen (navController: NavHostController) { }
 
-@Composable
-fun ReadyScripts (navController: NavHostController) {
-    Column () {
-        Bar(navController)
-
-        Box() {
-            Button(onClick = {
-                navController.navigate("play" )
-                // генерация скрипта
-            }) { Text("Bubble sort") }
-        }
-        Box() {
-            Button(onClick = {
-                navController.navigate("play" )
-                // генерация скрипта
-            }) { Text("algos") }
-        }
-        Box() {
-            Button(onClick = {
-                navController.navigate("play" )
-                // генерация скрипта
-            }) { Text("algos") }
-        }
-        Box() {
-            Button(onClick = {
-                navController.navigate("play" )
-                // генерация скрипта
-            }) { Text("algos") }
-        }
-    }
-}
+// хз решил не трогать
 
 @Composable
 fun SetScript (name: String) {
@@ -115,113 +79,9 @@ fun SetScript (name: String) {
 }
 
 @Composable
-fun Info (navController: NavHostController) {
-    Bar(navController)
-
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement
-            .SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box (
-            modifier = Modifier
-                .width((LocalConfiguration.current.screenWidthDp * 0.95).dp)
-                .background(Color.Gray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Это мобильное приложение помогает легко создавать и запускать алгоритмы прямо на вашем телефоне. Вы строите алгоритмы из простых блоков - например, условий и циклов - и сразу видите, как они работают.\n" +
-                    "\n" +
-                    "Приложение не требует сложных настроек и компиляции - оно сразу выполняет ваш алгоритм, показывая результат пошагово. Это удобно для обучения и быстрого тестирования идей.",
-                textAlign = TextAlign.Center)
-        }
-
-        Box (
-            modifier = Modifier
-                .width((LocalConfiguration.current.screenWidthDp * 0.95).dp)
-                .background(Color.Gray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Это мобильное приложение помогает легко создавать и запускать алгоритмы прямо на вашем телефоне. Вы строите алгоритмы из простых блоков - например, условий и циклов - и сразу видите, как они работают.\n" +
-                    "\n" +
-                    "Приложение не требует сложных настроек и компиляции - оно сразу выполняет ваш алгоритм, показывая результат пошагово. Это удобно для обучения и быстрого тестирования идей.",
-                textAlign = TextAlign.Center)
-        }
-
-    }
-}
+fun InfoScreen (navController: NavHostController) { }
 
 
 @Composable
-fun Play (navController: NavHostController) {
-    Column {
-        Bar(navController)
-        AddElemBar()
-    }
+fun BuildScreen (navController: NavHostController) { }
 
-}
-
-@Composable
-fun AddElemBar () {
-    var expanded by remember { mutableStateOf(false) }
-    Column {
-        Button(onClick = {expanded = !expanded}) {
-            Text(text = "add elem")
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {expanded = false}
-        ) {
-            DropdownMenuItem(
-                text = {Text("tmp")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("array")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("arithmetic")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("if")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("else if")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("compare")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = {Text("for")},
-                onClick = {
-                    //add elem from back
-                    expanded = false
-                }
-            )
-        }
-    }
-}

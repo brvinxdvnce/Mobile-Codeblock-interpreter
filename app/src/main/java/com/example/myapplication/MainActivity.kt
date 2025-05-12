@@ -69,6 +69,8 @@ fun ReadyScriptsScreen (navController: NavHostController) { }
 
 // хз решил не трогать
 
+//и правильно, лучше не надо
+
 @Composable
 fun SetScript (name: String) {
     Text(name)

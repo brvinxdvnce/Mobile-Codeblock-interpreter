@@ -13,5 +13,4 @@ fun BuildScreen (navController: NavHostController) {
         Bar(navController)
         AddElemBar()
     }
-
 }

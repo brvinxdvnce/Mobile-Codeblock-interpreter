@@ -5,7 +5,7 @@ class VariableNode(val name: String) : Node(), Calculate {
     }
 
     override fun calculate(dataWork: DataWork): Int {
-        return dataWork.variables[name] ?: throw RuntimeException("Переменная '$name' не инициализирована")
+        return dataWork.variables[name] ?: throw RuntimeException("Variable '$name' not found")
     }
 
 

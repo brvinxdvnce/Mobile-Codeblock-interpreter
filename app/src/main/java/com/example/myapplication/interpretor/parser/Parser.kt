@@ -14,6 +14,22 @@ class Parser {
                 symbol.matches(Regex("-?[0-9]+")) ->
                     stackInput.add(NumberNode(symbol.toInt()))
 
+                symbol.matches(Regex("^\".*\"$")) -> {
+                    val literal = symbol.substring(1, symbol.length - 1)
+                    stackInput.add(PrintString(literal))
+                }
+
+                symbol == "print" ->{
+                    val value = stackInput.removeAt(stackInput.lastIndex)
+                    when (value){
+                        is VariableNode, is Expression, is CompareNode, is NumberNode ->
+                            stackOutput.add(PrintNode(value))
+                        is PrintString ->
+                            stackOutput.add(value)
+
+                    }
+                }
+
                 symbol in setOf("+", "-", "/", "*") -> {
                     val r = stackInput.removeAt(stackInput.lastIndex)
                     val l = stackInput.removeAt(stackInput.lastIndex)

@@ -42,7 +42,7 @@ import com.example.myapplication.otherElements.AddElemBar
 import com.example.myapplication.otherElements.Bar
 
 @Composable
-fun OutputConsoleScreen ( onClose: () -> Unit, content : List<String> = List(100) {listOf("1", "2", "3")}.flatten()) {
+fun OutputConsoleScreen ( onClose: () -> Unit, content : List<String> = List(100) {listOf("привет")}.flatten()) {
 
     Box (modifier = Modifier.fillMaxSize()) {
         Surface(
@@ -83,7 +83,8 @@ fun OutputConsoleScreen ( onClose: () -> Unit, content : List<String> = List(100
                         Text(
                             str,
                             modifier = Modifier
-                                .padding(4.dp),
+                                .padding(4.dp)
+                                .fillMaxWidth(),
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp

@@ -59,6 +59,5 @@ fun Bar (navController: NavHostController) {
         Button(onClick = { navController.navigate("info") { launchSingleTop = true } },
             colors = ButtonDefaults.buttonColors(Black))
         { Text(text = stringResource(R.string.infa)) }
-
     }
 }

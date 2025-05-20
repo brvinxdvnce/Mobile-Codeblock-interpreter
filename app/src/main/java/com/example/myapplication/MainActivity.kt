@@ -36,11 +36,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import com.example.myapplication.screens.ReadyScriptsScreen
 import com.example.myapplication.screens.InfoScreen
 import com.example.myapplication.otherElements.Bar
 import com.example.myapplication.otherElements.AddElemBar
 import com.example.myapplication.screens.BuildScreen
+import com.example.myapplication.screens.SplashScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +51,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "info") {
+            NavHost(navController = navController, startDestination = "splash") {
                 composable("build") {
                     BuildScreen(navController)
                 }
@@ -58,6 +60,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("info") {
                     InfoScreen(navController)
+                }
+                composable("splash") {
+                    SplashScreen(navController)
                 }
             }
         }

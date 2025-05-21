@@ -48,18 +48,27 @@ fun ReadyScriptsScreen(navController: NavHostController) {
             item {
                 ScriptButton(
                     navController,
-                    stringResource(R.string.algos_1),
-                    stringResource(R.string.algos_1_info)
+                    stringResource(R.string.sum_of_2),
+                    stringResource(R.string.sum_of_2_info)
                 );
             }
             item {
-                ScriptButton(navController, stringResource(R.string.algos_2));
+                ScriptButton(
+                    navController,
+                    stringResource(R.string.hello_world),
+                    stringResource(R.string.hello_world_info));
             }
             item {
-                ScriptButton(navController, stringResource(R.string.algos_3));
+                ScriptButton(
+                    navController,
+                    stringResource(R.string.factorial),
+                    stringResource(R.string.factorial_info));
             }
             item {
-                ScriptButton(navController, stringResource(R.string.algos_3));
+                ScriptButton(navController,
+                    stringResource(R.string.fibbo_number),
+                    stringResource(R.string.fibbo_number_info)
+                    );
             }
             item {
                 ScriptButton(

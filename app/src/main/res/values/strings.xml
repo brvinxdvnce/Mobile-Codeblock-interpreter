@@ -1,22 +1,30 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">CodeBlocks</string>
+
     <string name="info">"Это мобильное приложение помогает легко создавать и запускать алгоритмы прямо на вашем телефоне. Вы строите алгоритмы из простых блоков - например, условий и циклов - и сразу видите, как они работают.\n\nПриложение не требует сложных настроек и компиляции - оно сразу выполняет ваш алгоритм, показывая результат пошагово. Это удобно для обучения и быстрого тестирования идей."</string>
 
-    <string name="info2">"Это мобильное приложение помогает легко создавать и запускать алгоритмы прямо на вашем телефоне. Вы строите алгоритмы из простых блоков - например, условий и циклов - и сразу видите, как они работают.\n\n
-                    Приложение не требует сложных настроек и компиляции - оно сразу выполняет ваш алгоритм, показывая результат пошагово. Это удобно для обучения и быстрого тестирования идей."</string>
+    <string name="info_how_to_use">
+        "Build Code - Пользователь может самостоятельно построить программу из блоков. Здесь представлен удобный визуальный редактор, где можно перетаскивать и соединять блоки кода, формируя собственный алгоритм или программу. Это отличный инструмент для обучения и экспериментов, позволяющий понять логику построения программ без необходимости писать код вручную.\nReady Scripts - Эта страница содержит готовые шаблоны программ и алгоритмов, которые пользователь может просмотреть, изучить и поработать с ними. Здесь собраны примеры популярных и полезных скриптов, которые можно запускать, изменять и использовать как основу для собственных проектов."
+    </string>
 
     <string name="build_Alg">Build Code</string>
     <string name="rdy_scripts">Ready scripts</string>
     <string name="infa">Information</string>
 
     <string name="bubble_sort">Bubble sort</string>
-    <string name="bubble_sort_info">когда алгоритм так медленно думает, что даже улитка начинает нервничать и просить ускориться.</string>
+    <string name="bubble_sort_info">Когда алгоритм так медленно думает, что даже улитка начинает нервничать и просить ускориться.</string>
 
-    <string name="algos_1">Algorithm 1</string>
-    <string name="algos_1_info">Algorithm 1</string>
+    <string name="sum_of_2">Sum of 2</string>
+    <string name="sum_of_2_info">2 + 2 сложить ты сможешь.</string>
 
-    <string name="algos_2">Algorithm 2</string>
-    <string name="algos_2_info">Algorithm 2</string>
+    <string name="hello_world">Hello, world!</string>
+    <string name="hello_world_info">по базе</string>
+
+    <string name="factorial">Factorial func</string>
+    <string name="factorial_info">n*(n-1)*...*1, ничего особенного </string>
+
+    <string name="fibbo_number">Fibonacci sequence</string>
+    <string name="fibbo_number_info">Не увлекайтесь рекурсией!</string>
 
     <string name="algos_3">Algorithm 3</string>
     <string name="algos_3_info">Algorithm 3</string>

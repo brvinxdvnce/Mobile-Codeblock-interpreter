@@ -89,6 +89,45 @@ class Parser {
 
                 }
 
+                symbol == "@while" ->{
+                    val condition = stackInput.removeAt(stackInput.lastIndex) as? CompareNode
+                        ?: throw RuntimeException("While condition must be CompareNode")
+
+                    val bodyTokens = mutableListOf<String>()
+                    while (i < RPN.size && RPN[i] != "@endwhile") {
+                        bodyTokens += RPN[i++]
+                    }
+
+                    val bodyNodes = parser(bodyTokens)
+
+                    stackOutput.add(WhileNode(condition, bodyNodes))
+                    continue
+                }
+
+                symbol == "init[]" ->{
+                    val size = stackInput.removeAt(stackInput.lastIndex)
+                    val arrName = stackInput.removeAt(stackInput.lastIndex) as? VariableNode
+                        ?: throw java.lang.RuntimeException("Array must be init as variable")
+                    stackOutput.add(InitArrayNode(arrName.name, size))
+
+                }
+
+                symbol == "[]=" ->{
+                    val value = stackInput.removeAt(stackInput.lastIndex)
+                    val index = stackInput.removeAt(stackInput.lastIndex)
+                    val arr =  stackInput.removeAt(stackInput.lastIndex) as? VariableNode
+                        ?: throw RuntimeException("Name must be variable")
+                    stackOutput.add(SetArrayNode(arr.name, index, value))
+                }
+
+                symbol =="[]" ->{
+                    val index = stackInput.removeAt(stackInput.lastIndex)
+                    val arr =  stackInput.removeAt(stackInput.lastIndex) as? VariableNode
+                        ?: throw RuntimeException("Name must be variable")
+                    stackInput.add(GetArrayNode(arr.name, index))
+                }
+
+
 
 
                 else -> if (symbol.matches(Regex("[a-zA-Z_]\\w*"))) {

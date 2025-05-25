@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import com.example.myapplication.otherElements.AddElemBar
 import com.example.myapplication.otherElements.Bar
+import com.example.myapplication.otherElements.RunButton
 
 @Composable
 fun BuildScreens (navController: NavHostController) {

@@ -33,6 +33,9 @@ fun BuildScreen(navController: NavHostController) {
     var errorBlocks by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var rpnTokenList by remember { mutableStateOf(emptyList<String>()) }
     var consoleOutput by remember { mutableStateOf(listOf<String>()) }
+
+    val navBarPadding = WindowInsets.navigationBars.asPaddingValues()
+
     LaunchedEffect(declaredVariables) {
         blocks = blocks.map { block ->
             when (block.type) {
@@ -41,7 +44,11 @@ fun BuildScreen(navController: NavHostController) {
             }
         }
     }
-    Column {
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = navBarPadding.calculateBottomPadding())
+    ) {
         Bar(navController)
 
         // Показываем сообщение об ошибках, если они есть
@@ -84,26 +91,32 @@ fun BuildScreen(navController: NavHostController) {
             }
         }
 
-        RunButton(
-            onClick = {
-                errorBlocks = validateAllBlocks(blocks, declaredVariables)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            RunButton(
+                onClick = {
+                    errorBlocks = validateAllBlocks(blocks, declaredVariables)
 
-                if (errorBlocks.isEmpty()) {
-                    // строки в списки токенов
-                    val rpnTokens = blocks
-                        .filter { it.type != BlockType.PLACEHOLDER }
-                        .flatMap { block ->
-                            block.rpn.split(" ").filter { it.isNotBlank() }
-                        }
-                    println("RPN TOKENS: ${rpnTokens.joinToString(" ")}") // Лог в консоль
-                    consoleVisibility = true
-                    rpnTokenList = rpnTokens
-                    val interpreter = Interpretor()
-                    val output = interpreter.run(rpnTokens)
-                    consoleOutput = output
+                    if (errorBlocks.isEmpty()) {
+                        // строки в списки токенов
+                        val rpnTokens = blocks
+                            .filter { it.type != BlockType.PLACEHOLDER }
+                            .flatMap { block ->
+                                block.rpn.split(" ").filter { it.isNotBlank() }
+                            }
+                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}") // Лог в консоль
+                        consoleVisibility = true
+                        rpnTokenList = rpnTokens
+                        val interpreter = Interpretor()
+                        val output = interpreter.run(rpnTokens)
+                        consoleOutput = output
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     // Диалог выбора типа блока
@@ -254,36 +267,3 @@ fun BuildScreen(navController: NavHostController) {
         )
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

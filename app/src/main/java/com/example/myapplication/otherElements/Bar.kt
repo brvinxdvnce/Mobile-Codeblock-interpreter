@@ -48,16 +48,13 @@ fun Bar (navController: NavHostController) {
             .SpaceEvenly
     )
     {
-        Button(onClick = {navController.navigate("build") { launchSingleTop = true } },
-            colors = ButtonDefaults.buttonColors(Black))
-        { Text(text = stringResource(R.string.build_Alg)) }
+        BarButton(navController, "build",
+            stringResource(R.string.build_Alg))
 
-        Button(onClick = { navController.navigate("scripts") { launchSingleTop = true } },
-            colors = ButtonDefaults.buttonColors(Black))
-        { Text(text = stringResource(R.string.rdy_scripts)) }
+        BarButton(navController, "scripts",
+            stringResource(R.string.rdy_scripts))
 
-        Button(onClick = { navController.navigate("info") { launchSingleTop = true } },
-            colors = ButtonDefaults.buttonColors(Black))
-        { Text(text = stringResource(R.string.infa)) }
+        BarButton(navController, "info",
+            stringResource(R.string.infa))
     }
 }

@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.myapplication.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +76,8 @@ fun SplashScreen(navController: NavHostController) {
                 modifier = Modifier.size(
                     width = (LocalConfiguration.current.screenWidthDp * 0.6).dp,
                     height = (LocalConfiguration.current.screenWidthDp * 0.2).dp)
+                    .clip(RoundedCornerShape(15.dp)),
+                shape = RectangleShape,
             ) {
                 Text(
                     text = "Start program",

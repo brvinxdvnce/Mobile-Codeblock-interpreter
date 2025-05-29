@@ -96,14 +96,3 @@ fun OutputConsoleScreen ( onClose: () -> Unit, content : List<String> = List(100
 }
 
 
-@Composable
-fun RunButton(onClick: ()-> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Black)
-    ) {
-        Text("Run program")
-    }
-}

@@ -11,6 +11,7 @@ class Expression(val leftItem: Node, val operation: String, val rightItem: Node)
             is NumberNode -> leftItem.calculate()
             is VariableNode -> leftItem.calculate(dataWork)
             is Expression -> leftItem.calculate(dataWork)
+            is GetArrayNode ->leftItem.calculate(dataWork)
             else -> throw RuntimeException("Item is not correct")
         }
 
@@ -18,6 +19,7 @@ class Expression(val leftItem: Node, val operation: String, val rightItem: Node)
             is NumberNode -> rightItem.calculate()
             is VariableNode -> rightItem.calculate(dataWork)
             is Expression -> rightItem.calculate(dataWork)
+            is GetArrayNode ->rightItem.calculate(dataWork)
             else -> throw RuntimeException("Item is not correct")
         }
 

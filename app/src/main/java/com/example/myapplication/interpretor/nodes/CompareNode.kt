@@ -10,6 +10,7 @@ class CompareNode(val leftNode: Node, val compareString: String, val rightNode: 
             is NumberNode -> leftNode.calculate()
             is VariableNode -> leftNode.calculate(dataWork)
             is Expression -> leftNode.calculate(dataWork)
+            is GetArrayNode -> leftNode.calculate(dataWork)
             else -> throw RuntimeException("Node is uncalculate")
         }
 
@@ -17,6 +18,7 @@ class CompareNode(val leftNode: Node, val compareString: String, val rightNode: 
             is NumberNode -> rightNode.calculate()
             is VariableNode -> rightNode.calculate(dataWork)
             is Expression -> rightNode.calculate(dataWork)
+            is GetArrayNode -> rightNode.calculate(dataWork)
             else -> throw RuntimeException("Node is uncalculate")
         }
 

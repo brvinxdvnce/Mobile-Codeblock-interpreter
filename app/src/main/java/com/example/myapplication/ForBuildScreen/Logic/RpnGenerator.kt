@@ -7,6 +7,7 @@ fun generateRpn(type: BlockType, content: String, declaredVariables: List<String
         BlockType.VARIABLE_DECLARATION -> generateVariableDeclarationRpn(content)
         BlockType.ASSIGNMENT -> generateAssignmentRpn(content, declaredVariables)
         BlockType.ARRAY_DECLARATION-> generateArrayDeclaration(content,declaredVariables)
+        BlockType.ARRAY_ASSIGNMENT -> assignmentArray(content,declaredVariables)
         BlockType.IF -> generateConditionRpn(content, declaredVariables, "@true")
         BlockType.WHILE -> generateConditionRpn(content, declaredVariables, "@while")
         BlockType.ELSE -> "@false"
@@ -27,12 +28,19 @@ fun generateVariableDeclarationRpn(content: String): String {
 
 fun generateAssignmentRpn(content: String, declaredVariables: List<String>): String {
     val (left, right) = parseAssignment(content) ?: return "ERROR"
-
+    val rpnRight : String
     return when {
         !isValidVariableName(left) -> "ERROR"
         !declaredVariables.contains(left) -> "ERROR"
         else -> {
-            val rpnRight = convertArithmeticToRpn(right, declaredVariables)
+            if (isArray(right))
+            {
+                 rpnRight = convertArrayToRpn(right,declaredVariables)
+            }
+            else
+            {
+                 rpnRight = convertArithmeticToRpn(right, declaredVariables)
+            }
             if (rpnRight == "ERROR") "ERROR" else "$left $rpnRight ="
         }
     }
@@ -41,6 +49,16 @@ fun generateAssignmentRpn(content: String, declaredVariables: List<String>): Str
 fun generateConditionRpn(condition: String, declaredVariables: List<String>, jumpLabel: String): String {
     val (left, operator, right) = parseCondition(condition) ?: return "ERROR"
 
+    //если обе части массивы
+    if (isArray(left) && isArray(right))
+    {
+        val leftRpn = convertArrayToRpn(left,declaredVariables)
+        val rightRpn = convertArrayToRpn(right,declaredVariables)
+        return when {
+            leftRpn.contains("ERROR") || rightRpn.contains("ERROR") -> "ERROR"
+            else -> "$leftRpn $rightRpn $operator $jumpLabel"
+        }
+    }
     // чекаем левую часть
     val leftRpn = when {
         isNumber(left) -> left
@@ -64,13 +82,14 @@ fun generateConditionRpn(condition: String, declaredVariables: List<String>, jum
     }
 
     return when {
-        leftRpn.startsWith("ERROR") || rightRpn.startsWith("ERROR") -> "ERROR"
+        leftRpn.contains("ERROR") || rightRpn.contains("ERROR") -> "ERROR"
         else -> "$leftRpn $rightRpn $operator $jumpLabel"
     }
 }
 
 fun generatePrintRpn(content: String, declaredVariables: List<String>): String {
     return when {
+        isArray(content) -> "${convertArrayToRpn(content,declaredVariables)} print"
         isStringLiteral(content) ->
             if (content.length >= 2) "$content print" else "ERROR"
         isNumber(content) -> "$content print"
@@ -79,12 +98,12 @@ fun generatePrintRpn(content: String, declaredVariables: List<String>): String {
             else "ERROR"
         else -> {
             val rpn = convertArithmeticToRpn(content, declaredVariables)
-            if (rpn.startsWith("ERROR")) rpn else "$rpn print"
+            if (rpn.contains("ERROR")) rpn else "$rpn print"
         }
     }
 }
 
-
+//преобразует и проверяет строку выражения в рпн
 fun convertArithmeticToRpn(expression: String, declaredVariables: List<String>): String {
     return try {
         val tokens = tokenizeArithmeticExpression(expression)

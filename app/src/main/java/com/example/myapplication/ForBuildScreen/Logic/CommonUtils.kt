@@ -14,7 +14,7 @@ fun isStringLiteral(value: String): Boolean {
 
 fun isArray(content: String) : Boolean
 {
-    return content.matches(Regex(""""^[a-zA-Z_]\\w*\\[(\\d+|[a-zA-Z_]\\w*)\\]$"""))
+    return content.matches(Regex("^[a-zA-Z_]\\w*\\[.+\\]$"))
 }
 
 fun getOperatorPrecedence(op: String): Int = when (op) {

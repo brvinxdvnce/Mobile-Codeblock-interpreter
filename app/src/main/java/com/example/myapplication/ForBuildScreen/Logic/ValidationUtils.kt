@@ -1,7 +1,6 @@
 package com.example.myapplication.ForBuildScreen.Logic
 
-import com.example.myapplication.ForBuildScreen.BlockType
-import com.example.myapplication.ForBuildScreen.CodeBlock
+import com.example.myapplication.ForBuildScreen.*
 
 fun validateAllBlocks(blocks: List<CodeBlock>, declaredVariables: List<String>): Set<Int> {
     val errorBlocks = mutableSetOf<Int>()
@@ -39,7 +38,7 @@ fun validateBlockStructure(
     blocks.forEach { block ->
         // проверяем все кроме флагов
         if (block.type != BlockType.ENDIF && block.type != BlockType.ENDWHILE && block.type != BlockType.ELSE) {
-            if (block.rpn.startsWith("ERROR")) {
+            if (block.rpn.contains("ERROR")) {
                 errorBlocks.add(block.id)
             }
         }
@@ -47,7 +46,7 @@ fun validateBlockStructure(
         when (block.type) {
             BlockType.IF, BlockType.WHILE -> {
 
-                if (block.rpn.startsWith("ERROR")) {
+                if (block.rpn.contains("ERROR")) {
                     errorBlocks.add(block.id)
                 }
                 blockStack.add(block.id to block.type)

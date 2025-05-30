@@ -8,12 +8,14 @@ class SetArrayNode(val name: String, val index: Node, val value: Node): Node() {
             is NumberNode -> index.calculate()
             is VariableNode -> index.calculate(dataWork)
             is Expression -> index.calculate(dataWork)
+            is GetArrayNode ->index.calculate(dataWork)
             else -> throw RuntimeException("Index is uncalculate")
         }
         val valueArr = when (value){
             is NumberNode -> value.calculate()
             is VariableNode -> value.calculate(dataWork)
             is Expression -> value.calculate(dataWork)
+            is GetArrayNode->value.calculate(dataWork)
             else -> throw RuntimeException("Value is uncalculate")
         }
         val array = dataWork.arrays[name]

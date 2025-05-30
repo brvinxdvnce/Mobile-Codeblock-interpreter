@@ -120,7 +120,7 @@ fun BuildScreen(navController: NavHostController) {
                         consoleVisibility = true
                         rpnTokenList = rpnTokens
                         val testrpn = listOf("arr","2","init[]","arr","0","1","[]=","arr","1","2","[]=","arr","0","[]","print")
-                        val output = interpreter.run(testrpn)
+                        val output = interpreter.run(rpnTokens)
                         consoleOutput = output
                     }
                 }
@@ -145,6 +145,7 @@ fun BuildScreen(navController: NavHostController) {
                                             val defaultContent = when (type) {
                                                 BlockType.VARIABLE_DECLARATION -> ""
                                                 BlockType.ARRAY_DECLARATION ->""
+                                                BlockType.ARRAY_ASSIGNMENT ->"arr[0] = 5"
                                                 BlockType.ASSIGNMENT -> "x = 0"
                                                 BlockType.IF -> "x > 0"
                                                 BlockType.WHILE -> "x < 10"
@@ -188,7 +189,7 @@ fun BuildScreen(navController: NavHostController) {
         )
     }
 
-    // Диалог редактирования блока
+    // диалог редактирования блока
     if (showEditDialog) {
         val currentBlock = blocks.firstOrNull { it.id == selectedBlockId }
         AlertDialog(
@@ -203,7 +204,7 @@ fun BuildScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // Подсказки для разных типов блоков
+                    // подсказки для разных типов блоков
                     when (currentBlock?.type) {
                         BlockType.VARIABLE_DECLARATION -> {
                             Text(stringResource(R.string.help_formar_variable_declaration),
@@ -215,6 +216,16 @@ fun BuildScreen(navController: NavHostController) {
                             Text(stringResource(R.string.help_formar_assignment),
                                 style = MaterialTheme.typography.labelSmall)
                             Text(stringResource(R.string.help_example_assignment),
+                                style = MaterialTheme.typography.labelSmall)
+                        }
+                        BlockType.ARRAY_DECLARATION -> {
+                            Text("Formmat: name[size]")
+                            Text("Example: arr[5]")
+                        }
+                        BlockType.ARRAY_ASSIGNMENT->{
+                            Text("Format: name[idx] = variable,or expression,or name[idx]",
+                                style = MaterialTheme.typography.labelSmall)
+                            Text("Example arr[0] = 5 or arr[2+1] = 2+1 etc",
                                 style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.IF -> {

@@ -26,7 +26,7 @@ class Parser {
                 symbol == "print" ->{
                     val value = stackInput.removeAt(stackInput.lastIndex)
                     when (value){
-                        is VariableNode, is Expression, is CompareNode, is NumberNode ->
+                        is VariableNode, is Expression, is CompareNode, is NumberNode, is GetArrayNode ->
                             stackOutput.add(PrintNode(value))
                         is PrintString ->
                             stackOutput.add(value)

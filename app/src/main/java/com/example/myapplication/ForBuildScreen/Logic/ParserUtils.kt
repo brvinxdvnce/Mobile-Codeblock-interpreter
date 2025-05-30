@@ -110,7 +110,7 @@ fun parseCondition(condition: String): Triple<String, String, String>? {
     val operatorMatch = Regex("""([<>]=?|==|!=)""").find(condition) ?: return null
     val operator = operatorMatch.value
 
-    // Разделяем на левую и правую части
+    // разделяем на левую и правую часть
     val leftPart = condition.substring(0, operatorMatch.range.first).trim()
     val rightPart = condition.substring(operatorMatch.range.last + 1).trim()
 

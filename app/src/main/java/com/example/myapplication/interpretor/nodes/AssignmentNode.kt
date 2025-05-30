@@ -6,6 +6,7 @@ class AssignmentNode(val name: String, val nodeValue: Node):Node() {
             is NumberNode -> nodeValue.calculate()
             is VariableNode -> nodeValue.calculate(dataWork)
             is Expression -> nodeValue.calculate(dataWork)
+            is GetArrayNode ->nodeValue.calculate(dataWork)
             else -> throw RuntimeException("Node is uncalculate")
         }
         dataWork.variables[name] = value

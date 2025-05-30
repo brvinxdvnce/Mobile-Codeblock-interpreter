@@ -3,7 +3,6 @@ package com.example.myapplication.ForBuildScreen.Logic
 import com.example.myapplication.ForBuildScreen.BlockType
 import com.example.myapplication.ForBuildScreen.CodeBlock
 
-
 fun validateAllBlocks(blocks: List<CodeBlock>, declaredVariables: List<String>): Set<Int> {
     val errorBlocks = mutableSetOf<Int>()
     val tempVariables = mutableListOf<String>()
@@ -71,11 +70,3 @@ fun hasRpnError(block: CodeBlock, errorBlocks: Set<Int>): Boolean {
     return block.id in errorBlocks
 }
 
-
-fun precedence(op: String): Int = when (op) {
-    "*", "/", "%" -> 4
-    "+", "-" -> 3
-    ">", "<", ">=", "<=" -> 2
-    "==", "!=" -> 1
-    else -> throw IllegalArgumentException("ERROR")
-}

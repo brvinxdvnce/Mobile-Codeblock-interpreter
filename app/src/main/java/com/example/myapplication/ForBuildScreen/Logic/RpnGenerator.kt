@@ -2,7 +2,6 @@ package com.example.myapplication.ForBuildScreen.Logic
 
 import com.example.myapplication.ForBuildScreen.BlockType
 
-
 fun generateRpn(type: BlockType, content: String, declaredVariables: List<String>): String {
     return when (type) {
         BlockType.VARIABLE_DECLARATION -> generateVariableDeclarationRpn(content)

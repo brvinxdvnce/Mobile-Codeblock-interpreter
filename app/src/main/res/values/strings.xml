@@ -21,11 +21,12 @@
     <string name="hello_world_info">по базе</string>
 
     <string name="factorial">Factorial func</string>
-    <string name="factorial_info">n*(n-1)*...*1, ничего особенного </string>
+    <string name="factorial_info">n*(n-1)*...*1, ничего особенного</string>
 
     <string name="fibbo_number">Fibonacci sequence</string>
     <string name="fibbo_number_info">Не увлекайтесь рекурсией!</string>
 
     <string name="algos_3">Algorithm 3</string>
     <string name="algos_3_info">Algorithm 3</string>
+    <string name="error_message">Ошибки в коде! Исправьте отмеченные блоки перед запуском.</string>
 </resources>

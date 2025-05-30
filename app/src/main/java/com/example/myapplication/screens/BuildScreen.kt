@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -7,13 +8,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.myapplication.otherElements.Bar
 import com.example.myapplication.ForBuildScreen.*
 import com.example.myapplication.ForBuildScreen.Logic.*
+import com.example.myapplication.R
 import com.example.myapplication.ScriptSaving.CustomScriptRepository
 import com.example.myapplication.ScriptSaving.Script
+import com.example.myapplication.ScriptSaving.ScriptStorage
 import com.example.myapplication.interpretor.main.Interpretor
 import com.example.myapplication.otherElements.RunButton
 import com.example.myapplication.otherElements.SetUserScriptButton
@@ -33,7 +38,9 @@ fun BuildScreen(navController: NavHostController) {
     val interpreter = remember { Interpretor() }
     var showSaveDialog by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
     val navBarPadding = WindowInsets.navigationBars.asPaddingValues()
+    val colors = MaterialTheme.colorScheme
 
     LaunchedEffect(declaredVariables) {
         blocks = blocks.map { block ->
@@ -47,13 +54,14 @@ fun BuildScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = navBarPadding.calculateBottomPadding())
+            .background(colors.background)
     ) {
         Bar(navController)
 
         // Показываем сообщение об ошибках, если они есть
         if (errorBlocks.isNotEmpty()) {
             Text(
-                text = "Ошибки в коде! Исправьте отмеченные блоки перед запуском.",
+                text = stringResource(R.string.error_run_conflict),
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(16.dp)
             )
@@ -108,7 +116,7 @@ fun BuildScreen(navController: NavHostController) {
                             .flatMap { block ->
                                 block.rpn.split(" ").filter { it.isNotBlank() }
                             }
-                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}") // Лог в консоль
+                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}")
                         consoleVisibility = true
                         rpnTokenList = rpnTokens
                         val output = interpreter.run(rpnTokens)
@@ -123,7 +131,7 @@ fun BuildScreen(navController: NavHostController) {
     if (showBlockDialog) {
         AlertDialog(
             onDismissRequest = { showBlockDialog = false },
-            title = { Text("Select Block Type") },
+            title = { Text(stringResource(R.string.select_block_type)) },
             text = {
                 Column {
                     BlockType.values()
@@ -140,19 +148,22 @@ fun BuildScreen(navController: NavHostController) {
                                                 BlockType.WHILE -> "x < 10"
                                                 BlockType.PRINT -> "x"
                                                 else -> ""
-
                                             }
                                             val newBlock = block.copy(
                                                 type = type,
                                                 content = defaultContent,
-                                                rpn = generateRpn(type, defaultContent, declaredVariables)
+                                                rpn = generateRpn(
+                                                    type,
+                                                    defaultContent,
+                                                    declaredVariables
+                                                )
                                             )
 
-                                            // Для объявления переменной проверяем перед добавлением
+                                            //Для объявления переменной проверяем перед добавлением
                                             if (type == BlockType.VARIABLE_DECLARATION) {
                                                 val varName = defaultContent.trim()
-                                                if (varName.matches(Regex("[a-zA-Z_]\\w*")) &&
-                                                    varName !in declaredVariables) {
+                                                if (varName.matches(Regex("[a-zA-Z_]\\w*"))
+                                                    && varName !in declaredVariables) {
                                                     declaredVariables = declaredVariables + varName
                                                 }
                                             }
@@ -186,31 +197,41 @@ fun BuildScreen(navController: NavHostController) {
                     TextField(
                         value = currentEditText,
                         onValueChange = { currentEditText = it },
-                        label = { Text("Enter content") },
+                        label = { Text(stringResource(R.string.enter_content)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     // Подсказки для разных типов блоков
                     when (currentBlock?.type) {
                         BlockType.VARIABLE_DECLARATION -> {
-                            Text("Format: variable_name", style = MaterialTheme.typography.labelSmall)
-                            Text("Example: counter", style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_formar_variable_declaration),
+                                style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_example_variable_declaration),
+                                style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.ASSIGNMENT -> {
-                            Text("Format: variable = expression", style = MaterialTheme.typography.labelSmall)
-                            Text("Example: x = 5 + y", style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_formar_assignment),
+                                style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_example_assignment),
+                                style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.IF -> {
-                            Text("Format: condition", style = MaterialTheme.typography.labelSmall)
-                            Text("Example: x > 0 ", style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_formar_if),
+                                style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_example_if),
+                                style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.WHILE -> {
-                            Text("Format: condition", style = MaterialTheme.typography.labelSmall)
-                            Text("Example: i < variable or constant or expression", style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_formar_while),
+                                style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_example_while),
+                                style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.PRINT -> {
-                            Text("Format: variable, expression or 'string'", style = MaterialTheme.typography.labelSmall)
-                            Text("Examples: x, x + 5, 'Hello!'", style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_formar_print),
+                                style = MaterialTheme.typography.labelSmall)
+                            Text(stringResource(R.string.help_example_print),
+                                style = MaterialTheme.typography.labelSmall)
                         }
                         else -> {}
                     }
@@ -220,7 +241,8 @@ fun BuildScreen(navController: NavHostController) {
                 Button(
                     onClick = {
                         // Временная переменная для новых declaredVariables
-                        val newDeclaredVariables = if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
+                        val newDeclaredVariables =
+                            if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
                             declaredVariables - currentBlock.content.trim() + currentEditText.trim()
                         } else {
                             declaredVariables
@@ -231,12 +253,22 @@ fun BuildScreen(navController: NavHostController) {
                             if (block.id == selectedBlockId) {
                                 block.copy(
                                     content = currentEditText,
-                                    rpn = generateRpn(block.type, currentEditText, newDeclaredVariables)
+                                    rpn = generateRpn(
+                                        block.type,
+                                        currentEditText,
+                                        newDeclaredVariables
+                                    )
                                 )
                             } else {
                                 when (block.type) {
                                     BlockType.VARIABLE_DECLARATION -> block
-                                    else -> block.copy(rpn = generateRpn(block.type, block.content, newDeclaredVariables))
+                                    else -> block.copy(
+                                        rpn = generateRpn(
+                                            block.type,
+                                            block.content,
+                                            newDeclaredVariables
+                                        )
+                                    )
                                 }
                             }
                         }
@@ -249,12 +281,12 @@ fun BuildScreen(navController: NavHostController) {
                         showEditDialog = false
                     }
                 ) {
-                    Text("Save")
+                    Text(stringResource(R.string.save))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showEditDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -266,6 +298,7 @@ fun BuildScreen(navController: NavHostController) {
             onDismiss = { showSaveDialog = false},
             onSave = { name, desc ->
                 CustomScriptRepository.scripts.add(Script(name, desc, blocks))
+                ScriptStorage.saveScripts(context, CustomScriptRepository.scripts)
                 showSaveDialog = false
             }
         )

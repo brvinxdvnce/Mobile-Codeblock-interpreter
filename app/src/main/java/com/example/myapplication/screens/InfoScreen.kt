@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +32,8 @@ import com.example.myapplication.otherElements.SocialLinkText
 
 @Composable
 fun InfoScreen (navController: NavHostController) {
+    val colors = MaterialTheme.colorScheme
+
     Box {
         Column {
             Bar(navController)
@@ -46,7 +49,7 @@ fun InfoScreen (navController: NavHostController) {
                         .clip(RoundedCornerShape(10.dp))
                         .border(width = 4.dp, color = Color.Black)
                         .width((LocalConfiguration.current.screenWidthDp * 0.95).dp)
-                        .background(Color.White)
+                        .background(colors.background)
                         .padding(8.dp),
                     contentAlignment = Alignment.Center
                 ) {

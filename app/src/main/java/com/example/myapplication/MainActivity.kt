@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.example.myapplication.ScriptSaving.CustomScriptRepository
 import com.example.myapplication.screens.ReadyScriptsScreen
 import com.example.myapplication.screens.InfoScreen
 import com.example.myapplication.screens.BuildScreen
@@ -15,6 +16,9 @@ import com.example.myapplication.screens.SplashScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        CustomScriptRepository.loadScripts(applicationContext)
+
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()

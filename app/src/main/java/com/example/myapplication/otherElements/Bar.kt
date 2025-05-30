@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -17,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun Bar (navController: NavHostController) {
+    val colors = MaterialTheme.colorScheme
+
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(top = 48.dp)
@@ -43,10 +46,11 @@ fun Bar (navController: NavHostController) {
         BarButton(navController, "build",
             stringResource(R.string.build_Alg))
 
+        BarButton(navController, "info",
+            stringResource(R.string.infa))
+
         BarButton(navController, "scripts",
             stringResource(R.string.rdy_scripts))
 
-        BarButton(navController, "info",
-            stringResource(R.string.infa))
     }
 }

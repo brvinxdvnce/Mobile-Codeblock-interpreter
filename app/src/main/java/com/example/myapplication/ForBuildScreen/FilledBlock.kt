@@ -1,7 +1,9 @@
 package com.example.myapplication.ForBuildScreen
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -27,45 +29,62 @@ fun FilledBlock(
 ) {
     val isEditable = block.type !in listOf(BlockType.ELSE, BlockType.ENDIF)
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            contentColor = if (hasError) {
-                MaterialTheme.colorScheme.onErrorContainer
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
-        )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(0.95f),
+            colors = CardDefaults.cardColors(
+                contentColor = if (hasError) {
+                    MaterialTheme.colorScheme.onErrorContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
+            )
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = block.type.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = if (hasError) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = block.type.name,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (hasError) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    )
+                    Text(
+                        text = block.content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (hasError) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    )
+                }
+                if (isEditable) {
+                    IconButton(onClick = onEdit) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            tint = if (hasError) {
+                                MaterialTheme.colorScheme.error
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            }
+                        )
                     }
-                )
-                Text(
-                    text = block.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (hasError) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    }
-                )
-            }
-            if (isEditable) {
-                IconButton(onClick = onEdit) {
+                }
+                IconButton(onClick = onDelete) {
                     Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Edit",
+                        Icons.Default.Delete,
+                        contentDescription = "Delete",
                         tint = if (hasError) {
                             MaterialTheme.colorScheme.error
                         } else {
@@ -73,17 +92,6 @@ fun FilledBlock(
                         }
                     )
                 }
-            }
-            IconButton(onClick = onDelete) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = if (hasError) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    }
-                )
             }
         }
     }

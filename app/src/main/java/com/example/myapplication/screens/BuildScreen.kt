@@ -10,18 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.myapplication.otherElements.Bar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material.icons.sharp.*
-import androidx.compose.material.icons.twotone.*
 import com.example.myapplication.ForBuildScreen.*
 import com.example.myapplication.ForBuildScreen.Logic.*
-import com.example.myapplication.R
+import com.example.myapplication.ScriptSaving.CustomScriptRepository
+import com.example.myapplication.ScriptSaving.Script
 import com.example.myapplication.interpretor.main.Interpretor
 import com.example.myapplication.otherElements.RunButton
-import androidx.compose.ui.res.stringResource
+import com.example.myapplication.otherElements.SetUserScriptButton
 
 @Composable
 fun BuildScreen(navController: NavHostController) {
@@ -35,6 +30,8 @@ fun BuildScreen(navController: NavHostController) {
     var errorBlocks by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var rpnTokenList by remember { mutableStateOf(emptyList<String>()) }
     var consoleOutput by remember { mutableStateOf(listOf<String>()) }
+    val interpreter = remember { Interpretor() }
+    var showSaveDialog by remember { mutableStateOf(false) }
 
     val navBarPadding = WindowInsets.navigationBars.asPaddingValues()
 
@@ -53,16 +50,18 @@ fun BuildScreen(navController: NavHostController) {
     ) {
         Bar(navController)
 
-        // Показываем сообщение об ошибках если они есть
+        // Показываем сообщение об ошибках, если они есть
         if (errorBlocks.isNotEmpty()) {
             Text(
-                text = stringResource(R.string.error_message),
+                text = "Ошибки в коде! Исправьте отмеченные блоки перед запуском.",
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(16.dp)
             )
         }
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(blocks, key = { it.id }) { block ->
@@ -109,10 +108,9 @@ fun BuildScreen(navController: NavHostController) {
                             .flatMap { block ->
                                 block.rpn.split(" ").filter { it.isNotBlank() }
                             }
-                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}")
+                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}") // Лог в консоль
                         consoleVisibility = true
                         rpnTokenList = rpnTokens
-                        val interpreter = Interpretor()
                         val output = interpreter.run(rpnTokens)
                         consoleOutput = output
                     }
@@ -121,7 +119,7 @@ fun BuildScreen(navController: NavHostController) {
         }
     }
 
-    // диалог выбора типа блока
+    // Диалог выбора типа блока
     if (showBlockDialog) {
         AlertDialog(
             onDismissRequest = { showBlockDialog = false },
@@ -136,7 +134,7 @@ fun BuildScreen(navController: NavHostController) {
                                     blocks = blocks.map { block ->
                                         if (block.id == selectedBlockId) {
                                             val defaultContent = when (type) {
-                                                BlockType.VARIABLE_DECLARATION -> ""
+                                                BlockType.VARIABLE_DECLARATION -> "x"
                                                 BlockType.ASSIGNMENT -> "x = 0"
                                                 BlockType.IF -> "x > 0"
                                                 BlockType.WHILE -> "x < 10"
@@ -170,6 +168,7 @@ fun BuildScreen(navController: NavHostController) {
                                 Text(type.name)
                             }
                         }
+
                 }
             },
             confirmButton = {}
@@ -191,11 +190,11 @@ fun BuildScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // подсказки для разных типов блоков
+                    // Подсказки для разных типов блоков
                     when (currentBlock?.type) {
                         BlockType.VARIABLE_DECLARATION -> {
-                            Text("Формат: имя_переменной", style = MaterialTheme.typography.labelSmall)
-                            Text("Пример: counter", style = MaterialTheme.typography.labelSmall)
+                            Text("Format: variable_name", style = MaterialTheme.typography.labelSmall)
+                            Text("Example: counter", style = MaterialTheme.typography.labelSmall)
                         }
                         BlockType.ASSIGNMENT -> {
                             Text("Format: variable = expression", style = MaterialTheme.typography.labelSmall)
@@ -220,14 +219,14 @@ fun BuildScreen(navController: NavHostController) {
             confirmButton = {
                 Button(
                     onClick = {
-                        // временная переменная для новых declaredVariables
+                        // Временная переменная для новых declaredVariables
                         val newDeclaredVariables = if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
                             declaredVariables - currentBlock.content.trim() + currentEditText.trim()
                         } else {
                             declaredVariables
                         }
 
-                        // сначала обновляем все блоки с новыми declaredVariables
+                        // Сначала обновляем все блоки с новыми declaredVariables
                         blocks = blocks.map { block ->
                             if (block.id == selectedBlockId) {
                                 block.copy(
@@ -242,7 +241,7 @@ fun BuildScreen(navController: NavHostController) {
                             }
                         }
 
-                        // затем обновляем declaredVariables
+                        // Затем обновляем declaredVariables
                         if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
                             declaredVariables = newDeclaredVariables
                         }
@@ -261,11 +260,24 @@ fun BuildScreen(navController: NavHostController) {
         )
     }
 
+    // Поле с сохранением скрипта
+    if (showSaveDialog) {
+        SetUserScriptButton(
+            onDismiss = { showSaveDialog = false},
+            onSave = { name, desc ->
+                CustomScriptRepository.scripts.add(Script(name, desc, blocks))
+                showSaveDialog = false
+            }
+        )
+    }
+
     // Консоль вывода
     if (consoleVisibility) {
         OutputConsoleScreen(
             onClose = { consoleVisibility = false },
-            content = consoleOutput
+            content = consoleOutput,
+            showSaveDialog = showSaveDialog,
+            onShowSaveDialogChange = { showSaveDialog = it}
         )
     }
 }

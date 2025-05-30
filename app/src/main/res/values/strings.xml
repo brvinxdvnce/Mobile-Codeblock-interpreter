@@ -21,7 +21,7 @@
     <string name="hello_world_info">по базе</string>
 
     <string name="factorial">Factorial func</string>
-    <string name="factorial_info">n*(n-1)*...*1, ничего особенного </string>
+    <string name="factorial_info">n*(n-1)*...*1, ничего особенного</string>
 
     <string name="fibbo_number">Fibonacci sequence</string>
     <string name="fibbo_number_info">Не увлекайтесь рекурсией!</string>

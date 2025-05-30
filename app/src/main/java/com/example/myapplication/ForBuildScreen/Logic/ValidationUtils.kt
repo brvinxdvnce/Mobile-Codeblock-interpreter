@@ -41,7 +41,7 @@ fun validateBlockStructure(
             BlockType.IF, BlockType.WHILE -> blockStack.add(block.id to block.type)
             BlockType.ENDIF -> handleEndBlock(block, blockStack, errorBlocks, BlockType.IF)
             BlockType.ENDWHILE -> handleEndBlock(block, blockStack, errorBlocks, BlockType.WHILE)
-            else -> if (hasRpnError(block.rpn)) errorBlocks.add(block.id)
+            else -> if (block.rpn.startsWith("ERROR")) errorBlocks.add(block.id)
         }
     }
 }

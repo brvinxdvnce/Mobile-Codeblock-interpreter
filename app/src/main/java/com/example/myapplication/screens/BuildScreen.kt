@@ -142,7 +142,8 @@ fun BuildScreen(navController: NavHostController) {
                                     blocks = blocks.map { block ->
                                         if (block.id == selectedBlockId) {
                                             val defaultContent = when (type) {
-                                                BlockType.VARIABLE_DECLARATION -> "x"
+                                                BlockType.VARIABLE_DECLARATION -> ""
+                                                BlockType.ARRAY_DECLARATION ->""
                                                 BlockType.ASSIGNMENT -> "x = 0"
                                                 BlockType.IF -> "x > 0"
                                                 BlockType.WHILE -> "x < 10"

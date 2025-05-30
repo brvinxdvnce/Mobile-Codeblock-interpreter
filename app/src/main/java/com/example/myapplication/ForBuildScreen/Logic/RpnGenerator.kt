@@ -6,6 +6,7 @@ fun generateRpn(type: BlockType, content: String, declaredVariables: List<String
     return when (type) {
         BlockType.VARIABLE_DECLARATION -> generateVariableDeclarationRpn(content)
         BlockType.ASSIGNMENT -> generateAssignmentRpn(content, declaredVariables)
+        BlockType.ARRAY_DECLARATION-> generateArrayDeclaration(content,declaredVariables)
         BlockType.IF -> generateConditionRpn(content, declaredVariables, "@true")
         BlockType.WHILE -> generateConditionRpn(content, declaredVariables, "@while")
         BlockType.ELSE -> "@false"
@@ -44,14 +45,22 @@ fun generateConditionRpn(condition: String, declaredVariables: List<String>, jum
     val leftRpn = when {
         isNumber(left) -> left
         isValidVariableName(left) && declaredVariables.contains(left) -> left
-        else -> convertArithmeticToRpn(left, declaredVariables)
+        else -> try {
+            convertArithmeticToRpn(left, declaredVariables)
+        } catch (e: Exception) {
+            "ERROR"
+        }
     }
 
     // чекаем правую часть
     val rightRpn = when {
         isNumber(right) -> right
         isValidVariableName(right) && declaredVariables.contains(right) -> right
-        else -> convertArithmeticToRpn(right, declaredVariables)
+        else -> try {
+            convertArithmeticToRpn(right, declaredVariables)
+        } catch (e: Exception) {
+            "ERROR"
+        }
     }
 
     return when {

@@ -4,8 +4,13 @@ import androidx.compose.runtime.ReusableComposeNode
 
 class InitArrayNode(val name: String, val size: Node): Node() {
     override fun work(dataWork: DataWork) {
-        val sizeArr = (size as? Calculate)?.calculate(dataWork)
-            ?: throw RuntimeException("Size must be calculatable")
+        val sizeArr = when (size){
+            is NumberNode -> size.calculate()
+            is VariableNode -> size.calculate(dataWork)
+            is Expression -> size.calculate(dataWork)
+            else -> throw RuntimeException("Size is uncalculate")
+        }
+
         if (sizeArr < 0) throw RuntimeException("Array size must be > 0")
         dataWork.arrays[name] = MutableList(sizeArr) { 0 }
     }

@@ -1,12 +1,5 @@
 package com.example.myapplication.screens
 
-import android.app.Application
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.os.Build
-import android.view.RoundedCorner
-import androidx.compose.material3.Switch
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

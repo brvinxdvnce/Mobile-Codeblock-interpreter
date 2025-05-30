@@ -6,7 +6,7 @@ fun isValidVariableName(name: String): Boolean {
 }
 
 fun isNumber(token: String): Boolean {
-    return token.matches(Regex("""^-?\d+$"""))
+    return token.matches(Regex("""^\d+$""")) //
 }
 
 fun isStringLiteral(value: String): Boolean {
@@ -14,9 +14,7 @@ fun isStringLiteral(value: String): Boolean {
 }
 
 fun getOperatorPrecedence(op: String): Int = when (op) {
-    "~" -> 4 //
-    "*", "/", "%" -> 3
+    "*", "/",  -> 3
     "+", "-" -> 2
     else -> 0
 }
-

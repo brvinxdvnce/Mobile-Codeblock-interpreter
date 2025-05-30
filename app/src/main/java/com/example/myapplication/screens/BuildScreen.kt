@@ -18,8 +18,10 @@ import androidx.compose.material.icons.sharp.*
 import androidx.compose.material.icons.twotone.*
 import com.example.myapplication.ForBuildScreen.*
 import com.example.myapplication.ForBuildScreen.Logic.*
+import com.example.myapplication.R
 import com.example.myapplication.interpretor.main.Interpretor
 import com.example.myapplication.otherElements.RunButton
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun BuildScreen(navController: NavHostController) {
@@ -51,10 +53,10 @@ fun BuildScreen(navController: NavHostController) {
     ) {
         Bar(navController)
 
-        // Показываем сообщение об ошибках, если они есть
+        // Показываем сообщение об ошибках если они есть
         if (errorBlocks.isNotEmpty()) {
             Text(
-                text = "Ошибки в коде! Исправьте отмеченные блоки перед запуском.",
+                text = stringResource(R.string.error_message),
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(16.dp)
             )
@@ -107,7 +109,7 @@ fun BuildScreen(navController: NavHostController) {
                             .flatMap { block ->
                                 block.rpn.split(" ").filter { it.isNotBlank() }
                             }
-                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}") // Лог в консоль
+                        println("RPN TOKENS: ${rpnTokens.joinToString(" ")}")
                         consoleVisibility = true
                         rpnTokenList = rpnTokens
                         val interpreter = Interpretor()
@@ -119,7 +121,7 @@ fun BuildScreen(navController: NavHostController) {
         }
     }
 
-    // Диалог выбора типа блока
+    // диалог выбора типа блока
     if (showBlockDialog) {
         AlertDialog(
             onDismissRequest = { showBlockDialog = false },
@@ -134,7 +136,7 @@ fun BuildScreen(navController: NavHostController) {
                                     blocks = blocks.map { block ->
                                         if (block.id == selectedBlockId) {
                                             val defaultContent = when (type) {
-                                                BlockType.VARIABLE_DECLARATION -> "x"
+                                                BlockType.VARIABLE_DECLARATION -> ""
                                                 BlockType.ASSIGNMENT -> "x = 0"
                                                 BlockType.IF -> "x > 0"
                                                 BlockType.WHILE -> "x < 10"
@@ -189,7 +191,7 @@ fun BuildScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // Подсказки для разных типов блоков
+                    // подсказки для разных типов блоков
                     when (currentBlock?.type) {
                         BlockType.VARIABLE_DECLARATION -> {
                             Text("Формат: имя_переменной", style = MaterialTheme.typography.labelSmall)
@@ -218,14 +220,14 @@ fun BuildScreen(navController: NavHostController) {
             confirmButton = {
                 Button(
                     onClick = {
-                        // Временная переменная для новых declaredVariables
+                        // временная переменная для новых declaredVariables
                         val newDeclaredVariables = if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
                             declaredVariables - currentBlock.content.trim() + currentEditText.trim()
                         } else {
                             declaredVariables
                         }
 
-                        // Сначала обновляем все блоки с новыми declaredVariables
+                        // сначала обновляем все блоки с новыми declaredVariables
                         blocks = blocks.map { block ->
                             if (block.id == selectedBlockId) {
                                 block.copy(
@@ -240,7 +242,7 @@ fun BuildScreen(navController: NavHostController) {
                             }
                         }
 
-                        // Затем обновляем declaredVariables
+                        // затем обновляем declaredVariables
                         if (currentBlock?.type == BlockType.VARIABLE_DECLARATION) {
                             declaredVariables = newDeclaredVariables
                         }

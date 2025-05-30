@@ -28,4 +28,5 @@
 
     <string name="algos_3">Algorithm 3</string>
     <string name="algos_3_info">Algorithm 3</string>
+    <string name="error_message">Ошибки в коде! Исправьте отмеченные блоки перед запуском.</string>
 </resources>

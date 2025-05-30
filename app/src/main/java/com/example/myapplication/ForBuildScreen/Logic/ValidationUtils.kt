@@ -71,11 +71,3 @@ fun hasRpnError(block: CodeBlock, errorBlocks: Set<Int>): Boolean {
     return block.id in errorBlocks
 }
 
-
-fun precedence(op: String): Int = when (op) {
-    "*", "/", "%" -> 4
-    "+", "-" -> 3
-    ">", "<", ">=", "<=" -> 2
-    "==", "!=" -> 1
-    else -> throw IllegalArgumentException("ERROR")
-}

@@ -20,7 +20,7 @@ fun validateArithmeticTokens(tokens: List<String>, declaredVariables: List<Strin
         when {
             token == "(" -> {
                 if (!expectOperand) {
-                    throw IllegalArgumentException("ERROR'('")
+                    throw IllegalArgumentException("ERROR")
                 }
                 parenCount++
             }
@@ -102,7 +102,7 @@ fun arithmeticTokensToRpn(tokens: List<String>): String {
 }
 
 fun tokenizeArithmeticExpression(expression: String): List<String> {
-    val regex = Regex("""([a-zA-Z_]\w*|(?<!\d)-?\d+|[-+*/%()])""")
+    val regex = Regex("""([a-zA-Z_]\w*|\d+|[+\-*/()])""")
     return regex.findAll(expression).map { it.value }.toList()
 }
 

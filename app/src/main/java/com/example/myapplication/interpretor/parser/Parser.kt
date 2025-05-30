@@ -26,7 +26,6 @@ class Parser {
                             stackOutput.add(PrintNode(value))
                         is PrintString ->
                             stackOutput.add(value)
-
                     }
                 }
 
@@ -77,9 +76,13 @@ class Parser {
                 }
 
                 symbol =="@endif" -> {
-                    val elseBlock = if(stackInput[stackInput.size] !is CompareNode && stackInput[stackInput.size-1] !is CompareNode){
+                    val elseBlock = if (
+                        stackInput.lastOrNull() !is CompareNode &&
+                        stackInput.getOrNull(stackInput.size - 2) !is CompareNode
+                    ) {
                         stackInput.removeAt(stackInput.lastIndex)
-                    } else{null}
+                    } else null
+
 
                     val trueBlock = stackInput.removeAt(stackInput.lastIndex)
 
@@ -143,3 +146,4 @@ class Parser {
         return stackOutput
     }
 }
+

@@ -1,6 +1,5 @@
 package com.example.myapplication.ForBuildScreen.Logic
 
-
 fun isValidVariableName(name: String): Boolean {
     return name.matches(Regex("^[a-zA-Z_]\\w*$"))
 }

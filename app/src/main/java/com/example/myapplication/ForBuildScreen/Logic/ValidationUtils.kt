@@ -3,7 +3,6 @@ package com.example.myapplication.ForBuildScreen.Logic
 import com.example.myapplication.ForBuildScreen.BlockType
 import com.example.myapplication.ForBuildScreen.CodeBlock
 
-
 fun validateAllBlocks(blocks: List<CodeBlock>, declaredVariables: List<String>): Set<Int> {
     val errorBlocks = mutableSetOf<Int>()
     val tempVariables = mutableListOf<String>()

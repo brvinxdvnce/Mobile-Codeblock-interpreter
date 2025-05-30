@@ -1,26 +1,19 @@
 package com.example.myapplication.otherElements
 
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.myapplication.R
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.findFirstRoot
 import androidx.compose.ui.res.stringResource
-
 
 @Composable
 fun Bar (navController: NavHostController) {
@@ -28,7 +21,6 @@ fun Bar (navController: NavHostController) {
         .fillMaxWidth()
         .padding(top = 48.dp)
         .background(Color.Gray)
-        //.border(width = 2.dp, color = Color.Black)
         .drawWithContent {
             drawContent()
             drawLine(

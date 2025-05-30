@@ -35,7 +35,7 @@ class Parser {
                     i++
                 }
 
-                symbol in setOf("+", "-", "/", "*") -> {
+                symbol in setOf("+", "-", "/", "*","%") -> {
                     val r = stackInput.removeAt(stackInput.lastIndex)
                     val l = stackInput.removeAt(stackInput.lastIndex)
                     stackInput.add(Expression(l, symbol, r))

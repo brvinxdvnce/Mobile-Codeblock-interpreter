@@ -4,7 +4,7 @@ fun generateArrayDeclaration(content: String, declaredVariables: List<String>): 
     val regex = Regex("""^([a-zA-Z_]\w*)\[(\d+)\]\s*$""")
     val matchResult = regex.find(content)
     if (matchResult == null) {
-        return "ERROR" // Неправильный формат
+        return "ERROR" // неправильный формат
     }
     val (name, size) = matchResult.destructured
 
@@ -17,3 +17,14 @@ fun generateArrayDeclaration(content: String, declaredVariables: List<String>): 
         else -> "ERROR"
     }
 }
+
+////fun convertArrayToRpn(content: String) : String
+//{
+//    val regex = Regex("^([a-zA-Z_]\\w*)\\[([a-zA-z_])\\]$")
+//    val matchResult = regex.find(content)
+//    if (matchResult != null) {
+//        val (name, indexExpr) = matchResult.destructured
+//   //     return $name ""
+//    }
+//
+//}

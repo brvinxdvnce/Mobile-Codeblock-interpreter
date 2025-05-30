@@ -37,11 +37,24 @@ fun validateBlockStructure(
     declaredVariables: List<String>
 ) {
     blocks.forEach { block ->
+        // проверяем все кроме флагов
+        if (block.type != BlockType.ENDIF && block.type != BlockType.ENDWHILE && block.type != BlockType.ELSE) {
+            if (block.rpn.startsWith("ERROR")) {
+                errorBlocks.add(block.id)
+            }
+        }
+
         when (block.type) {
-            BlockType.IF, BlockType.WHILE -> blockStack.add(block.id to block.type)
+            BlockType.IF, BlockType.WHILE -> {
+
+                if (block.rpn.startsWith("ERROR")) {
+                    errorBlocks.add(block.id)
+                }
+                blockStack.add(block.id to block.type)
+            }
             BlockType.ENDIF -> handleEndBlock(block, blockStack, errorBlocks, BlockType.IF)
             BlockType.ENDWHILE -> handleEndBlock(block, blockStack, errorBlocks, BlockType.WHILE)
-            else -> if (block.rpn.startsWith("ERROR")) errorBlocks.add(block.id)
+            else->""
         }
     }
 }
@@ -61,10 +74,6 @@ fun handleEndBlock(
     }
 }
 
-
-fun hasRpnError(rpn: String): Boolean {
-    return rpn.startsWith("ERROR")
-}
 
 fun hasRpnError(block: CodeBlock, errorBlocks: Set<Int>): Boolean {
     return block.id in errorBlocks

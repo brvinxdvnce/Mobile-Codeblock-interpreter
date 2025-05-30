@@ -119,7 +119,8 @@ fun BuildScreen(navController: NavHostController) {
                         println("RPN TOKENS: ${rpnTokens.joinToString(" ")}")
                         consoleVisibility = true
                         rpnTokenList = rpnTokens
-                        val output = interpreter.run(rpnTokens)
+                        val testrpn = listOf("arr","2","init[]","arr","0","1","[]=","arr","1","2","[]=","arr","0","[]","print")
+                        val output = interpreter.run(testrpn)
                         consoleOutput = output
                     }
                 }

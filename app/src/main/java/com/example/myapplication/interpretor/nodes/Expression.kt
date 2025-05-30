@@ -25,6 +25,7 @@ class Expression(val leftItem: Node, val operation: String, val rightItem: Node)
             "+" -> l + r
             "-" -> l - r
             "*" -> l * r
+            "%" -> l % r
             "/" -> if (r != 0) l / r else throw ArithmeticException("Arithmetic Error")
             else -> throw RuntimeException("Operation is not correct")
         }

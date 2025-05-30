@@ -14,7 +14,6 @@ fun validateArithmeticTokens(tokens: List<String>, declaredVariables: List<Strin
 
     var expectOperand = true
     var parenCount = 0
-
     for (i in tokens.indices) {
         val token = tokens[i]
         when {
@@ -102,10 +101,9 @@ fun arithmeticTokensToRpn(tokens: List<String>): String {
 }
 
 fun tokenizeArithmeticExpression(expression: String): List<String> {
-    val regex = Regex("""([a-zA-Z_]\w*|\d+|[+\-*/()])""")
+    val regex = Regex("""([a-zA-Z_]\w*|\d+|[+\-*/%()])""")
     return regex.findAll(expression).map { it.value }.toList()
 }
-
 
 fun parseCondition(condition: String): Triple<String, String, String>? {
     // ищем сравнение

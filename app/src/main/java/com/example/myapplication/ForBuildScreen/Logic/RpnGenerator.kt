@@ -1,0 +1,88 @@
+package com.example.myapplication.ForBuildScreen.Logic
+
+import com.example.myapplication.ForBuildScreen.BlockType
+
+
+fun generateRpn(type: BlockType, content: String, declaredVariables: List<String>): String {
+    return when (type) {
+        BlockType.VARIABLE_DECLARATION -> generateVariableDeclarationRpn(content)
+        BlockType.ASSIGNMENT -> generateAssignmentRpn(content, declaredVariables)
+        BlockType.IF -> generateConditionRpn(content, declaredVariables, "@true")
+        BlockType.WHILE -> generateConditionRpn(content, declaredVariables, "@while")
+        BlockType.ELSE -> "@false"
+        BlockType.ENDIF -> "@endif"
+        BlockType.ENDWHILE -> "@endwhile"
+        BlockType.PRINT -> generatePrintRpn(content, declaredVariables)
+        else -> ""
+    }
+}
+
+fun generateVariableDeclarationRpn(content: String): String {
+    val variableName = content.trim()
+    return when {
+        !isValidVariableName(variableName) -> "ERROR"
+        else -> "$variableName 0 =" // по дефолту нолик
+    }
+}
+
+fun generateAssignmentRpn(content: String, declaredVariables: List<String>): String {
+    val (left, right) = parseAssignment(content) ?: return "ERROR"
+
+    return when {
+        !isValidVariableName(left) -> "ERROR"
+        !declaredVariables.contains(left) -> "ERROR"
+        else -> {
+            val rpnRight = convertArithmeticToRpn(right, declaredVariables)
+            if (rpnRight == "ERROR") "ERROR" else "$left $rpnRight ="
+        }
+    }
+}
+
+fun generateConditionRpn(condition: String, declaredVariables: List<String>, jumpLabel: String): String {
+    val (left, operator, right) = parseCondition(condition) ?: return "ERROR"
+
+    // чекаем левую часть
+    val leftRpn = when {
+        isNumber(left) -> left
+        isValidVariableName(left) && declaredVariables.contains(left) -> left
+        else -> convertArithmeticToRpn(left, declaredVariables)
+    }
+
+    // чекаем правую часть
+    val rightRpn = when {
+        isNumber(right) -> right
+        isValidVariableName(right) && declaredVariables.contains(right) -> right
+        else -> convertArithmeticToRpn(right, declaredVariables)
+    }
+
+    return when {
+        leftRpn.startsWith("ERROR") || rightRpn.startsWith("ERROR") -> "ERROR"
+        else -> "$leftRpn $rightRpn $operator $jumpLabel"
+    }
+}
+
+fun generatePrintRpn(content: String, declaredVariables: List<String>): String {
+    return when {
+        isStringLiteral(content) ->
+            if (content.length >= 2) "$content print" else "ERROR"
+        isNumber(content) -> "$content print"
+        isValidVariableName(content) ->
+            if (declaredVariables.contains(content)) "$content print"
+            else "ERROR"
+        else -> {
+            val rpn = convertArithmeticToRpn(content, declaredVariables)
+            if (rpn.startsWith("ERROR")) rpn else "$rpn print"
+        }
+    }
+}
+
+
+fun convertArithmeticToRpn(expression: String, declaredVariables: List<String>): String {
+    return try {
+        val tokens = tokenizeArithmeticExpression(expression)
+        validateArithmeticTokens(tokens, declaredVariables)
+        arithmeticTokensToRpn(tokens)
+    } catch (e: Exception) {
+        "ERROR"
+    }
+}

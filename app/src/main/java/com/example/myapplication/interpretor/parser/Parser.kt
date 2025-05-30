@@ -14,7 +14,7 @@ class Parser {
                 symbol.matches(Regex("-?[0-9]+")) ->
                     stackInput.add(NumberNode(symbol.toInt()))
 
-                symbol.matches(Regex("^\".*\"$")) -> {
+                symbol.matches(Regex("^\'.*\'$")) -> {
                     val literal = symbol.substring(1, symbol.length - 1)
                     stackInput.add(PrintString(literal))
                 }
@@ -26,6 +26,7 @@ class Parser {
                             stackOutput.add(PrintNode(value))
                         is PrintString ->
                             stackOutput.add(value)
+
                     }
                 }
 
@@ -51,7 +52,7 @@ class Parser {
                 symbol == "@true" ->{
                     i++
                     val trueList = mutableListOf<String>()
-                    while (i < RPN.size && RPN[i] !in setOf("@false", "endif")){
+                    while (i < RPN.size && RPN[i] !in setOf("@false", "@endif")){
                         trueList += RPN[i++]
                     }
                     val trueBlock = parser(trueList)
@@ -83,7 +84,6 @@ class Parser {
                         stackInput.removeAt(stackInput.lastIndex)
                     } else null
 
-
                     val trueBlock = stackInput.removeAt(stackInput.lastIndex)
 
                     val condition = stackInput.removeAt(stackInput.lastIndex) as? CompareNode
@@ -92,17 +92,23 @@ class Parser {
 
                 }
 
-                symbol == "@while" ->{
+                symbol == "@while" -> {
+                    i++
+
                     val condition = stackInput.removeAt(stackInput.lastIndex) as? CompareNode
                         ?: throw RuntimeException("While condition must be CompareNode")
+
 
                     val bodyTokens = mutableListOf<String>()
                     while (i < RPN.size && RPN[i] != "@endwhile") {
                         bodyTokens += RPN[i++]
                     }
 
-                    val bodyNodes = parser(bodyTokens)
+                    if (i < RPN.size && RPN[i] == "@endwhile") {
+                        i++
+                    }
 
+                    val bodyNodes = parser(bodyTokens)
                     stackOutput.add(WhileNode(condition, bodyNodes))
                     continue
                 }
@@ -146,4 +152,3 @@ class Parser {
         return stackOutput
     }
 }
-

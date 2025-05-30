@@ -40,7 +40,6 @@ import androidx.navigation.NavController
 import com.example.myapplication.screens.ReadyScriptsScreen
 import com.example.myapplication.screens.InfoScreen
 import com.example.myapplication.otherElements.Bar
-import com.example.myapplication.otherElements.AddElemBar
 import com.example.myapplication.screens.BuildScreen
 import com.example.myapplication.screens.SplashScreen
 

@@ -60,7 +60,9 @@ fun BuildScreen(navController: NavHostController) {
             )
         }
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(blocks, key = { it.id }) { block ->

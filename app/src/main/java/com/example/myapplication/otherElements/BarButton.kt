@@ -29,6 +29,6 @@ fun BarButton(navController : NavHostController, route: String, string : String)
             .clip(RoundedCornerShape(10.dp)),
         shape = RectangleShape
     ) {
-        Text(text = stringResource(R.string.rdy_scripts))
+        Text(text = string)
     }
 }

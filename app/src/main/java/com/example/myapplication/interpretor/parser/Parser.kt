@@ -63,17 +63,26 @@ class Parser {
                     var depth = 1
                     var flagExit: Boolean = false
 
+
                     while (i < RPN.size && depth > 0) {
                         val t = RPN[i]
                         when (t) {
-                            "@true", "@while" -> {
+                            "@true" -> {
                                 depth++
                                 trueList += t
                                 i++
                             }
-                            "@endif","@false" -> {
+                            "@false" -> {
                                 if (depth > 1) {
-
+                                    trueList += t
+                                    i++
+                                } else {
+                                    flagExit = true
+                                    break
+                                }
+                            }
+                            "@endif" ->{
+                                if (depth > 1) {
                                     depth--
                                     trueList += t
                                     i++
@@ -105,11 +114,13 @@ class Parser {
 
                     while (i < RPN.size && depth > 0) {
                         val t = RPN[i]
-                        when (t) {"@true", "@while" -> {
-                            depth++
-                            elseList += t
-                            i++
-                        }
+                        when (t) {
+
+                            "@true" -> {
+                                depth++
+                                elseList += t
+                                i++
+                            }
                             "@false" -> {
                                 elseList += t
                                 i++
@@ -118,7 +129,6 @@ class Parser {
 
                             "@endif" -> {
                                 if (depth > 1) {
-
                                     depth--
                                     elseList += t
                                     i++
@@ -168,23 +178,51 @@ class Parser {
 
                 symbol == "@while" -> {
                     i++
-
-                    val condition = stackInput.removeAt(stackInput.lastIndex) as? CompareNode
-                        ?: throw RuntimeException("While condition must be CompareNode")
-
-
+                    var flagExit: Boolean = false
                     val bodyTokens = mutableListOf<String>()
-                    while (i < RPN.size && RPN[i] != "@endwhile") {
-                        bodyTokens += RPN[i++]
+                    var depth = 1
+
+                    while (i < RPN.size) {
+                        val t = RPN[i]
+                        when (t) {
+                            "@while" -> {
+                                depth++
+                                bodyTokens += t
+                                i++
+                            }
+                            "@endwhile" -> {
+                                if (depth > 1) {
+                                    depth--
+                                    bodyTokens += t
+                                    i++
+                                } else {
+                                    flagExit = true
+                                    break
+                                }
+                            }
+                            else -> {
+                                bodyTokens += t
+                                i++
+                            }
+                        }
                     }
 
-                    if (i < RPN.size && RPN[i] == "@endwhile") {
-                        i++
-                    }
 
                     val bodyNodes = parser(bodyTokens)
-                    stackOutput.add(WhileNode(condition, bodyNodes))
-                    continue
+                    stackInput.add(BlockNode(bodyNodes))
+                    if (flagExit == false){
+                        continue
+                    }
+                }
+
+                symbol == "@endwhile" ->{
+                    val whileBlock = (stackInput.removeAt(stackInput.lastIndex) as? BlockNode)?.children
+                        ?: throw RuntimeException("Missing while block")
+                    val condition = stackInput.removeAt(stackInput.lastIndex) as? CompareNode
+                        ?: throw RuntimeException("While condition must be CompareNode")
+                    stackOutput.add(WhileNode(condition, whileBlock))
+                    i++
+
                 }
 
                 symbol == "init[]" ->{
@@ -204,6 +242,7 @@ class Parser {
                     stackOutput.add(SetArrayNode(arr.name, index, value))
                     i++
                 }
+
                 symbol =="[]" ->{
                     val index = stackInput.removeAt(stackInput.lastIndex)
                     val arr =  stackInput.removeAt(stackInput.lastIndex) as? VariableNode
